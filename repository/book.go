@@ -8,7 +8,7 @@ import (
 
 // interface employee
 type BookRepo interface {
-	GetBooks() ([]model.Books, error)
+	//GetBooks() ([]model.Books, error)
 	CreateBook(in model.Books) (res model.Books, err error)
 	GetBookByID(id int64) (res model.Books, err error)
 	UpdateBook(in model.Books) (res model.Books, err error)

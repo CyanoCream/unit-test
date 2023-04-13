@@ -12,21 +12,21 @@ type BookService interface {
 	//GetEmployeeByID(id int64) (res model.Employee, err error)
 	//UpdateEmployee(in model.Employee) (res model.Employee, err error)
 	//DeleteEmployee(id int64) (err error)
-	GetBooks() ([]model.Books, error)
+	//GetBooks() ([]model.Books, error)
 	CreateBook(in model.Books) (res model.Books, err error)
 	GetBookByID(id int64) (res model.Books, err error)
 	UpdateBook(in model.Books) (res model.Books, err error)
 	DeleteBook(id int64) (err error)
 }
 
-func (s *Service) GetBooks() ([]model.Books, error) {
-	book, err := s.repo.GetBooks()
-	if err != nil {
-		return book, err
-	}
-
-	return book, nil
-}
+//	func (s *Service) GetBooks() ([]model.Books, error) {
+//		book, err := s.repo.GetBooks()
+//		if err != nil {
+//			return book, err
+//		}
+//
+//		return book, nil
+//	}
 func (s *Service) CreateBook(in model.Books) (res model.Books, err error) {
 	if len(in.Author) < 5 {
 		return res, errors.New("invalid fullname length")

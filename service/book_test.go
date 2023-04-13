@@ -10,13 +10,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_EmployeeService_GetEmployeeByID(t *testing.T) {
+func Test_BookService_GetBookByID(t *testing.T) {
 	type testCase struct {
 		name           string
 		wantError      bool
-		expectedResult model.Employee
+		expectedResult model.Books
 		expectedError  error
-		onEmployeeRepo func(mock *mocks.MockEmployeeRepo)
+		onBookRepo     func(mock *mocks.MockBookRepo)
 	}
 
 	var testTable []testCase
@@ -24,21 +24,17 @@ func Test_EmployeeService_GetEmployeeByID(t *testing.T) {
 	testTable = append(testTable, testCase{
 		name:      "success",
 		wantError: false,
-		onEmployeeRepo: func(mock *mocks.MockEmployeeRepo) {
-			mock.EXPECT().GetEmployeeByID(gomock.Any()).Return(model.Employee{
-				ID:       1,
-				Fullname: "Rizqi",
-				Email:    "rizqi@gmail.com",
-				Age:      17,
-				Division: "Tech",
+		onBookRepo: func(mock *mocks.MockBookRepo) {
+			mock.EXPECT().GetBookByID(gomock.Any()).Return(model.Books{
+				ID:     1,
+				Title:  "Rizqi",
+				Author: "rizqi@gmail.com",
 			}, nil).Times(1)
 		},
-		expectedResult: model.Employee{
-			ID:       1,
-			Fullname: "Rizqi",
-			Email:    "rizqi@gmail.com",
-			Age:      17,
-			Division: "Tech",
+		expectedResult: model.Books{
+			ID:     1,
+			Title:  "Rizqi",
+			Author: "rizqi@gmail.com",
 		},
 	})
 
@@ -46,8 +42,8 @@ func Test_EmployeeService_GetEmployeeByID(t *testing.T) {
 		name:          "record not found",
 		wantError:     true,
 		expectedError: errors.New("record not found"),
-		onEmployeeRepo: func(mock *mocks.MockEmployeeRepo) {
-			mock.EXPECT().GetEmployeeByID(gomock.Any()).Return(model.Employee{}, errors.New("record not found")).Times(1)
+		onBookRepo: func(mock *mocks.MockBookRepo) {
+			mock.EXPECT().GetBookByID(gomock.Any()).Return(model.Books{}, errors.New("record not found")).Times(1)
 		},
 	})
 
@@ -55,8 +51,8 @@ func Test_EmployeeService_GetEmployeeByID(t *testing.T) {
 		name:          "unexpected error",
 		wantError:     true,
 		expectedError: errors.New("unexpected error"),
-		onEmployeeRepo: func(mock *mocks.MockEmployeeRepo) {
-			mock.EXPECT().GetEmployeeByID(gomock.Any()).Return(model.Employee{}, errors.New("unexpected error")).Times(1)
+		onBookRepo: func(mock *mocks.MockBookRepo) {
+			mock.EXPECT().GetBookByID(gomock.Any()).Return(model.Books{}, errors.New("unexpected error")).Times(1)
 		},
 	})
 
@@ -64,17 +60,17 @@ func Test_EmployeeService_GetEmployeeByID(t *testing.T) {
 		t.Run(testCase.name, func(t *testing.T) {
 			mockCtrl := gomock.NewController(t)
 
-			employeeRepo := mocks.NewMockEmployeeRepo(mockCtrl)
+			bookRepo := mocks.NewBookRepo(mockCtrl)
 
-			if testCase.onEmployeeRepo != nil {
-				testCase.onEmployeeRepo(employeeRepo)
+			if testCase.onBookRepo != nil {
+				testCase.onBookRepo(bookRepo)
 			}
 
 			service := Service{
-				repo: employeeRepo,
+				repo: bookRepo,
 			}
 
-			res, err := service.GetEmployeeByID(1)
+			res, err := service.GetBookByID(1)
 
 			if testCase.wantError {
 				assert.EqualError(t, err, testCase.expectedError.Error())
@@ -86,14 +82,14 @@ func Test_EmployeeService_GetEmployeeByID(t *testing.T) {
 	}
 }
 
-func Test_EmployeeService_CreateEmployee(t *testing.T) {
+func Test_BookService_CreateBook(t *testing.T) {
 	type testCase struct {
 		name           string
 		wantError      bool
-		input          model.Employee
-		expectedResult model.Employee
+		input          model.Books
+		expectedResult model.Books
 		expectedError  error
-		onEmployeeRepo func(mock *mocks.MockEmployeeRepo)
+		onBookRepo     func(mock *mocks.MockBookRepo)
 	}
 
 	var testTable []testCase
@@ -101,90 +97,243 @@ func Test_EmployeeService_CreateEmployee(t *testing.T) {
 	testTable = append(testTable, testCase{
 		name:      "success",
 		wantError: false,
-		input: model.Employee{
-			Fullname: "Rizqi",
-			Email:    "rizqi@gmail.com",
-			Age:      17,
-			Division: "Tech",
+		input: model.Books{
+			Title:  "Belajar Si Golang",
+			Author: "Hacktiv9 Indonesia",
 		},
-		onEmployeeRepo: func(mock *mocks.MockEmployeeRepo) {
-			mock.EXPECT().CreateEmployee(gomock.Any()).Return(model.Employee{
-				ID:       1,
-				Fullname: "Rizqi",
-				Email:    "rizqi@gmail.com",
-				Age:      17,
-				Division: "Tech",
+		onBookRepo: func(mock *mocks.MockBookRepo) {
+			mock.EXPECT().CreateBook(gomock.Any()).Return(model.Books{
+				ID:     1,
+				Title:  "Belajar Si Golang",
+				Author: "Hacktiv9 Indonesia",
 			}, nil).Times(1)
 		},
-		expectedResult: model.Employee{
-			ID:       1,
-			Fullname: "Rizqi",
-			Email:    "rizqi@gmail.com",
-			Age:      17,
-			Division: "Tech",
+		expectedResult: model.Books{
+			ID:     1,
+			Title:  "Belajar Si Golang",
+			Author: "Hacktiv9 Indonesia",
 		},
 	})
 
 	testTable = append(testTable, testCase{
 		name:      "unexpected error",
 		wantError: true,
-		input: model.Employee{
-			Fullname: "Rizqi",
-			Email:    "rizqi@gmail.com",
-			Age:      17,
-			Division: "Tech",
+		input: model.Books{
+			Title:  "Belajar Si Golang",
+			Author: "Hacktiv9 Indonesia",
 		},
 		expectedError: errors.New("unexpected error"),
-		onEmployeeRepo: func(mock *mocks.MockEmployeeRepo) {
-			mock.EXPECT().CreateEmployee(gomock.Any()).Return(model.Employee{}, errors.New("unexpected error")).Times(1)
+		onBookRepo: func(mock *mocks.MockBookRepo) {
+			mock.EXPECT().CreateBook(gomock.Any()).Return(model.Books{}, errors.New("unexpected error")).Times(1)
 		},
 	})
 
 	testTable = append(testTable, testCase{
-		name:      "invalid fullname length",
+		name:      "invalid Title length",
 		wantError: true,
-		input: model.Employee{
-			Fullname: "Ade", // case negative
-			Email:    "ade@gmail.com",
-			Age:      17,
-			Division: "Tech",
+		input: model.Books{
+			Title:  "Golang si Golang", // case negative
+			Author: "Hacktiv10 Indonesia",
 		},
-		expectedError: errors.New("invalid fullname length"),
+		expectedError: errors.New("invalid Titel length"),
 	})
 
 	testTable = append(testTable, testCase{
-		name:      "invalid division",
+		name:      "invalid Author",
 		wantError: true,
-		input: model.Employee{
-			Fullname: "Anang",
-			Email:    "anang@gmail.com",
-			Age:      17,
-			Division: "Marketing", // case negative
+		input: model.Books{
+			Title:  "Golang",
+			Author: "anang",
 		},
-		expectedError: errors.New("invalid division"),
+		expectedError: errors.New("invalid Author"),
 	})
 
 	for _, testCase := range testTable {
 		t.Run(testCase.name, func(t *testing.T) {
 			mockCtrl := gomock.NewController(t)
 
-			employeeRepo := mocks.NewMockEmployeeRepo(mockCtrl)
+			bookRepo := mocks.NewBookRepo(mockCtrl)
 
-			if testCase.onEmployeeRepo != nil {
-				testCase.onEmployeeRepo(employeeRepo)
+			if testCase.onBookRepo != nil {
+				testCase.onBookRepo(bookRepo)
 			}
 
 			service := Service{
-				repo: employeeRepo,
+				repo: bookRepo,
 			}
 
-			res, err := service.CreateEmployee(testCase.input)
+			res, err := service.CreateBook(testCase.input)
 
 			if testCase.wantError {
 				assert.EqualError(t, err, testCase.expectedError.Error())
 			} else {
 				assert.Nil(t, err)
 				assert.Equal(t, testCase.expectedResult, res)
+			}
+		})
+	}
+}
+func Test_BookService_DeleteBook(t *testing.T) {
+	type testCase struct {
+		name          string
+		wantError     bool
+		expectedError error
+		onBookRepo    func(mock *mocks.MockBookRepo)
+	}
+
+	var testTable []testCase
+
+	testTable = append(testTable, testCase{
+		name:      "success",
+		wantError: false,
+		onBookRepo: func(mock *mocks.MockBookRepo) {
+			mock.EXPECT().DeleteBook(gomock.Any()).Return(nil).Times(1)
+		},
+	})
+
+	testTable = append(testTable, testCase{
+		name:          "record not found",
+		wantError:     true,
+		expectedError: errors.New("record not found"),
+		onBookRepo: func(mock *mocks.MockBookRepo) {
+			mock.EXPECT().DeleteBook(gomock.Any()).Return(errors.New("record not found")).Times(1)
+		},
+	})
+
+	testTable = append(testTable, testCase{
+		name:          "unexpected error",
+		wantError:     true,
+		expectedError: errors.New("unexpected error"),
+		onBookRepo: func(mock *mocks.MockBookRepo) {
+			mock.EXPECT().DeleteBook(gomock.Any()).Return(errors.New("unexpected error")).Times(1)
+		},
+	})
+
+	for _, testCase := range testTable {
+		t.Run(testCase.name, func(t *testing.T) {
+			mockCtrl := gomock.NewController(t)
+
+			bookRepo := mocks.NewBookRepo(mockCtrl)
+
+			if testCase.onBookRepo != nil {
+				testCase.onBookRepo(bookRepo)
+			}
+
+			service := Service{
+				repo: bookRepo,
+			}
+
+			err := service.DeleteBook(1)
+
+			if testCase.wantError {
+				assert.EqualError(t, err, testCase.expectedError.Error())
+			} else {
+				assert.Nil(t, err)
+			}
+		})
+	}
+}
+func Test_BookService_UpdateBook(t *testing.T) {
+	type testCase struct {
+		name           string
+		wantError      bool
+		inputID        int64
+		input          model.Books
+		expectedResult model.Books
+		expectedError  error
+		onBookRepo     func(mock *mocks.MockBookRepo)
+	}
+
+	var testTable []testCase
+
+	testTable = append(testTable, testCase{
+		name:      "success",
+		wantError: false,
+		inputID:   1,
+		input: model.Books{
+			Title:  "Belajar Si Golang",
+			Author: "Hacktiv9 Indonesia",
+		},
+		onBookRepo: func(mock *mocks.MockBookRepo) {
+			mock.EXPECT().UpdateBook(gomock.Any()).Return(nil)
+		},
+		expectedResult: model.Books{
+			ID:     1,
+			Title:  "Belajar Si Golang",
+			Author: "Hacktiv9 Indonesia",
+		},
+	})
+
+	testTable = append(testTable, testCase{
+		name:      "unexpected error",
+		wantError: true,
+		inputID:   1,
+		input: model.Books{
+			Title:  "Belajar Si Golang",
+			Author: "Hacktiv9 Indonesia",
+		},
+		expectedError: errors.New("unexpected error"),
+		onBookRepo: func(mock *mocks.MockBookRepo) {
+			mock.EXPECT().UpdateBook(gomock.Any()).Return(nil)
+		},
+	})
+
+	testTable = append(testTable, testCase{
+		name:      "invalid Title length",
+		wantError: true,
+		inputID:   1,
+		input: model.Books{
+			Title:  "Golang si Golang", // case negative
+			Author: "Hacktiv10 Indonesia",
+		},
+		expectedError: errors.New("invalid Title length"),
+	})
+
+	testTable = append(testTable, testCase{
+		name:      "invalid Author",
+		wantError: true,
+		inputID:   1,
+		input: model.Books{
+			Title:  "Golang",
+			Author: "anang",
+		},
+		expectedError: errors.New("invalid Author"),
+	})
+
+	testTable = append(testTable, testCase{
+		name:      "record not found",
+		wantError: true,
+		inputID:   1,
+		input: model.Books{
+			Title:  "Belajar Si Golang",
+			Author: "Hacktiv9 Indonesia",
+		},
+		expectedError: errors.New("record not found"),
+		onBookRepo: func(mock *mocks.MockBookRepo) {
+			mock.EXPECT().UpdateBook(gomock.Any()).Return(nil)
+		},
+	})
+
+	for _, testCase := range testTable {
+		t.Run(testCase.name, func(t *testing.T) {
+			mockCtrl := gomock.NewController(t)
+
+			bookRepo := mocks.NewBookRepo(mockCtrl)
+
+			if testCase.onBookRepo != nil {
+				testCase.onBookRepo(bookRepo)
+			}
+
+			service := Service{
+				repo: bookRepo,
+			}
+
+			err := service.DeleteBook(1)
+
+			if testCase.wantError {
+				assert.EqualError(t, err, testCase.expectedError.Error())
+			} else {
+				assert.Nil(t, err)
 			}
 		})
 	}

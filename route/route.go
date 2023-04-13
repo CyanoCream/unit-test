@@ -33,7 +33,7 @@ func RegisterApi(r *gin.Engine, server handler.HttpServer) {
 		//api.GET("/:id", server.GetEmployeeByID)
 		//api.PUT("/:id", server.UpdateEmployee)
 		//api.DELETE("/:id", server.DeleteEmployee)
-		api.GET("", server.GetBooks)
+		//api.GET("", server.GetBooks)
 		api.POST("", server.CreateBook)
 		api.GET("/:id", server.GetBookByID)
 		//api.GET("/:id", server.GetBookByID())

@@ -3,7 +3,6 @@ package handler
 // delivery, controller
 
 import (
-	"net/http"
 	"sesi_8/helper"
 	"sesi_8/model"
 	"strconv"
@@ -11,18 +10,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (h HttpServer) GetBooks(c *gin.Context) {
-	books, err := h.app.GetBooks()
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": http.StatusText(http.StatusOK),
-		"data":    books,
-	})
-}
+//	func (h HttpServer) GetBooks(c *gin.Context) {
+//		books, err := h.app.GetBooks()
+//		if err != nil {
+//			c.AbortWithError(http.StatusInternalServerError, err)
+//			return
+//		}
+//
+//		c.JSON(http.StatusOK, gin.H{
+//			"message": http.StatusText(http.StatusOK),
+//			"data":    books,
+//		})
+//	}
 func (h HttpServer) CreateBook(c *gin.Context) {
 	in := model.Books{}
 
