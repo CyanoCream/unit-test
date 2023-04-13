@@ -1,0 +1,151 @@
+definitions:
+  helper.Response:
+    properties:
+      data: {}
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  model.EmployeeReq:
+    properties:
+      age:
+        example: 20
+        type: integer
+      division:
+        example: Tech
+        type: string
+      email:
+        example: marwan@example.com
+        type: string
+      full_name:
+        example: Marwan
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /employee:
+    post:
+      consumes:
+      - application/json
+      description: Create a new employee
+      parameters:
+      - description: Create a new employee
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/model.EmployeeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      summary: Create a new employee
+      tags:
+      - employees
+  /employee/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an employee
+      parameters:
+      - description: ID of the employee
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      summary: Delete an employee
+      tags:
+      - employees
+    get:
+      consumes:
+      - application/json
+      description: Get details of employee corresponding to the input id
+      parameters:
+      - description: ID of the employee
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - BasicAuth: []
+      summary: Get details for a given id
+      tags:
+      - employees
+    put:
+      consumes:
+      - application/json
+      description: Update an employee
+      parameters:
+      - description: ID of the employee
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update an employee
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/model.EmployeeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      summary: Update an employee
+      tags:
+      - employees
+swagger: "2.0"
